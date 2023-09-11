@@ -5,14 +5,14 @@ import {
 import Layout from "./components/Layout";
 import HOME from "./routes/Home";
 import Profile from "./routes/Profile";
-import Login from "./routes/Login";
-import CreactAccount from "./routes/CreactAccount";
+import CreactAccount from "./routes/CreatAccount";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import Loading from "./components/Loading";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./routes/Login";
 
 const router = createBrowserRouter([
 	{
