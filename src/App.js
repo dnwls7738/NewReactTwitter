@@ -1,10 +1,13 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+	RouterProvider,
+	createBrowserRouter,
+} from "react-router-dom";
 import Layout from "./components/layout";
 import HOME from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
 import CreactAccount from "./routes/creact_account";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import { useEffect, useState } from "react";
 import Loading from "./components/loading";
@@ -45,6 +48,12 @@ body{
 	color: white;	
 }
 `;
+
+const Wrapper = styled.div`
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+`;
 function App() {
 	const [isLoading, setIsLoading] = useState(true);
 	const init = async () => {
@@ -55,10 +64,10 @@ function App() {
 		init();
 	}, []);
 	return (
-		<>
+		<Wrapper>
 			<GlobalStyles />
 			{isLoading ? <Loading /> : <RouterProvider router={router} />}
-		</>
+		</Wrapper>
 	);
 }
 
