@@ -2,15 +2,15 @@ import {
 	RouterProvider,
 	createBrowserRouter,
 } from "react-router-dom";
-import Layout from "./components/layout";
-import HOME from "./routes/home";
-import Profile from "./routes/profile";
-import Login from "./routes/login";
-import CreactAccount from "./routes/creact_account";
+import Layout from "./components/Layout";
+import HOME from "./routes/Home";
+import Profile from "./routes/Profile";
+import Login from "./routes/Login";
+import CreactAccount from "./routes/CreactAccount";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import { useEffect, useState } from "react";
-import Loading from "./components/loading";
+import Loading from "./components/Loading";
 import { auth } from "./firebase";
 
 const router = createBrowserRouter([
