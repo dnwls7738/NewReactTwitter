@@ -5,7 +5,7 @@ import {
 import Layout from "./components/Layout";
 import HOME from "./routes/Home";
 import Profile from "./routes/Profile";
-import CreactAccount from "./routes/CreatAccount";
+import CreateAccount from "./routes/CreateAccount";
 import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/create_account",
-		element: <CreactAccount />,
+		element: <CreateAccount />,
 	},
 ]);
 
