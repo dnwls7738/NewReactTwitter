@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import {
+	createUserWithEmailAndPassword,
+	updateProfile,
+} from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
 	height: 100%;
@@ -39,6 +45,7 @@ const Error = styled.span`
 `;
 
 function CreactAccount() {
+	const navigate = useNavigate();
 	const [isLoading, setisLoading] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -57,12 +64,19 @@ function CreactAccount() {
 			setPassword(value);
 		}
 	};
-	const onSubmit = (e) => {
+	const onSubmit = async (e) => {
 		e.preventDefault();
+		if (isLoading || name === "" || email === "" || password === "")
+			return;
 		try {
-			// 계정생성
-			// 유저 이름 설정
-			// 홈페이지로 리다이렉션
+			const credentials = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			console.log(credentials);
+			await updateProfile(credentials.user, { displayName: name });
+			navigate("/");
 		} catch (e) {
 			// 에러 설정
 		} finally {
