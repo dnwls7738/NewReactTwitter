@@ -11,6 +11,7 @@ import {
 	Error,
 	Switcher,
 } from "../components/AuthComponent";
+import GithubBtn from "../components/GithubBtn";
 
 function Login() {
 	const navigate = useNavigate();
@@ -70,9 +71,10 @@ function Login() {
 			</Form>
 			{error !== "" ? <Error>{error}</Error> : null}
 			<Switcher>
-				Don't have an account?{""}
+				Don't have an account? &nbsp;
 				<Link to="/create_account">Create one &rarr;</Link>
 			</Switcher>
+			<GithubBtn />
 		</Wrapper>
 	);
 }
