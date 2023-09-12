@@ -1,7 +1,8 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { auth, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
 	display: flex;
@@ -64,8 +65,12 @@ function PostTweetForm() {
 	};
 	const onFileChange = (e) => {
 		const { files } = e.target;
-		if (files && files.length === 1) {
+
+		const maxSize = 1 * 1024 * 1024;
+		if (files && files.length === 1 && files[0].size < maxSize) {
 			setFile(files[0]);
+		} else {
+			alert("Only 1MB or less images can be uploaded.");
 		}
 	};
 	const onSubmit = async (e) => {
@@ -76,12 +81,25 @@ function PostTweetForm() {
 
 		try {
 			setIsLoading(true);
-			await addDoc(collection(db, "tweets"), {
+			const doc = await addDoc(collection(db, "tweets"), {
 				tweet,
 				createdAt: Date.now(),
 				username: user.displayName || "Anonymous",
 				userId: user.uid,
 			});
+			if (file) {
+				const locationRef = ref(
+					storage,
+					`tweets/${user.uid}-${user.displayName}/${doc.id}`
+				);
+				const result = await uploadBytes(locationRef, file);
+				const url = getDownloadURL(result.ref);
+				await updateDoc(doc, {
+					photo: url,
+				});
+			}
+			setTweet("");
+			setFile(null);
 		} catch (e) {
 			console.log(e);
 		} finally {
@@ -91,6 +109,7 @@ function PostTweetForm() {
 	return (
 		<Form onSubmit={onSubmit}>
 			<TextArea
+				required
 				rows={5}
 				maxLength={500}
 				onChange={onChange}
