@@ -24,12 +24,12 @@ const Logo = styled.img`
 `;
 
 function GithubBtn() {
-	const Navigate = useNavigate();
+	const navigate = useNavigate();
 	const onClick = async () => {
 		try {
 			const provider = new GithubAuthProvider();
 			await signInWithPopup(auth, provider);
-			Navigate("/");
+			navigate("/");
 		} catch (error) {
 			console.log(error);
 		}

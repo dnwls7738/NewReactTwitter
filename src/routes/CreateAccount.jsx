@@ -13,42 +13,55 @@ import {
 	Input,
 	Error,
 	Switcher,
+	Submit,
 } from "../components/AuthComponent";
 import GithubBtn from "../components/GithubBtn";
 
 function CreatAccount() {
 	const navigate = useNavigate();
 	const [isLoading, setisLoading] = useState(false);
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	// const [name, setName] = useState("");
+	// const [email, setEmail] = useState("");
+	// const [password, setPassword] = useState("");
+	const [value, setValue] = useState({
+		name: "",
+		email: "",
+		password: "",
+	});
+
 	// input 변화를 알 수 있음
 	const onChange = (e) => {
-		const {
-			target: { name, value },
-		} = e;
-		if (name === "name") {
-			setName(value);
-		} else if (name === "email") {
-			setEmail(value);
-		} else if (name === "password") {
-			setPassword(value);
-		}
+		// if (name === "name") {
+		// 	setName(value);
+		// } else if (name === "email") {
+		// 	setEmail(value);
+		// } else if (name === "password") {
+		// 	setPassword(value);
+		// }
+		setValue({ ...value, [e.target.name]: e.target.value });
 	};
+
 	const onSubmit = async (e) => {
 		e.preventDefault();
 		setError("");
-		if (isLoading || name === "" || email === "" || password === "")
+		if (
+			isLoading ||
+			value.name === "" ||
+			value.email === "" ||
+			value.password === ""
+		)
 			return;
 		try {
 			setisLoading(true);
 			const credentials = await createUserWithEmailAndPassword(
 				auth,
-				email,
-				password
+				value.email,
+				value.password
 			);
-			await updateProfile(credentials.user, { displayName: name });
+			// await sendEmailVerification(auth.currentUser);
+			// alert("메일이 전송되었습니다");
+			await updateProfile(credentials.user, { displayName: value.name });
 			navigate("/");
 		} catch (e) {
 			setError(e.message);
@@ -65,7 +78,7 @@ function CreatAccount() {
 					name="name"
 					placeholder="Name"
 					type="text"
-					value={name}
+					value={value.name}
 					required
 				/>
 				<Input
@@ -73,7 +86,7 @@ function CreatAccount() {
 					name="email"
 					placeholder="Email"
 					type="email"
-					value={email}
+					value={value.email}
 					required
 				/>
 				<Input
@@ -81,10 +94,10 @@ function CreatAccount() {
 					name="password"
 					placeholder="Password"
 					type="password"
-					value={password}
+					value={value.password}
 					required
 				/>
-				<Input
+				<Submit
 					type="submit"
 					value={isLoading ? "Loading..." : "Create Account"}
 				/>

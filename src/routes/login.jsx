@@ -10,6 +10,7 @@ import {
 	Input,
 	Error,
 	Switcher,
+	Submit,
 } from "../components/AuthComponent";
 import GithubBtn from "../components/GithubBtn";
 
@@ -64,7 +65,7 @@ function Login() {
 					value={password}
 					required
 				/>
-				<Input
+				<Submit
 					type="submit"
 					value={isLoading ? "Loading..." : "Log in"}
 				/>

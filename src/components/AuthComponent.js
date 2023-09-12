@@ -32,6 +32,21 @@ export const Input = styled.input`
 		}
 	}
 `;
+export const Submit = styled.input`
+	background-color: #1d9bf0;
+	padding: 10px 20px;
+	border-radius: 50px;
+	border: none;
+	width: 100%;
+	font-size: 16px;
+	color: white;
+	&[type="submit"] {
+		cursor: pointer;
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+`;
 export const Error = styled.span`
 	font-weight: 600;
 	color: tomato;
