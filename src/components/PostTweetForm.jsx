@@ -1,5 +1,7 @@
+import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import styled from "styled-components";
+import { auth, db } from "../firebase";
 
 const Form = styled.form`
 	display: flex;
@@ -66,8 +68,28 @@ function PostTweetForm() {
 			setFile(files[0]);
 		}
 	};
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		const user = auth.currentUser;
+		if (!user || isLoading || tweet === "" || tweet.length > 500)
+			return;
+
+		try {
+			setIsLoading(true);
+			await addDoc(collection(db, "tweets"), {
+				tweet,
+				createdAt: Date.now(),
+				username: user.displayName || "Anonymous",
+				userId: user.uid,
+			});
+		} catch (e) {
+			console.log(e);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	return (
-		<Form>
+		<Form onSubmit={onSubmit}>
 			<TextArea
 				rows={5}
 				maxLength={500}
