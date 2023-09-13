@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
 const Wrapper = styled.div`
@@ -32,6 +32,19 @@ const DeleteBtn = styled.button`
 	border: 0;
 	font-size: 12px;
 	padding: 5px 10px;
+	margin-right: 5px;
+	text-transform: uppercase;
+	border-radius: 5px;
+	cursor: pointer;
+`;
+
+const EditBtn = styled.button`
+	background-color: #1d9bf0;
+	color: white;
+	font-weight: 600;
+	border: 0;
+	font-size: 12px;
+	padding: 5px 10px;
 	text-transform: uppercase;
 	border-radius: 5px;
 	cursor: pointer;
@@ -55,6 +68,20 @@ function Tweet({ username, photo, tweet, userId, id }) {
 		} finally {
 		}
 	};
+	const onEdit = async () => {
+		const ok = window.confirm(
+			"Are you sure you want to edit this tweet?"
+		);
+		if (!ok || user.uid !== userId) return;
+		try {
+			await updateDoc(doc, {
+				tweet,
+			});
+		} catch (e) {
+			console.log(e);
+		} finally {
+		}
+	};
 	return (
 		<Wrapper>
 			<Column>
@@ -63,6 +90,7 @@ function Tweet({ username, photo, tweet, userId, id }) {
 				{user.uid === userId ? (
 					<DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
 				) : null}
+				<EditBtn>Edit</EditBtn>
 			</Column>
 			{photo ? (
 				<Column>
