@@ -10,7 +10,15 @@ import styled from "styled-components";
 import { db } from "../firebase";
 import Tweet from "./Tweet";
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+	display: flex;
+	gap: 10px;
+	flex-direction: column;
+	overflow-y: scroll;
+	&::-webkit-scrollbar {
+		display: none;
+	}
+`;
 
 function Timeline() {
 	const [tweets, setTweet] = useState([]);
