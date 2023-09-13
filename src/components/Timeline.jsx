@@ -1,6 +1,7 @@
 import {
 	collection,
-	getDocs,
+	limit,
+	onSnapshot,
 	orderBy,
 	query,
 } from "firebase/firestore";
@@ -9,40 +10,40 @@ import styled from "styled-components";
 import { db } from "../firebase";
 import Tweet from "./Tweet";
 
-// export interface ITweet {
-// 	id: string;
-// 	photo: string;
-// 	tweet: string;
-// 	userId: string;
-// 	username: string;
-// 	createdAt: number;
-// }
-
 const Wrapper = styled.div``;
 
 function Timeline() {
 	const [tweets, setTweet] = useState([]);
-	const fetchTweets = async () => {
-		const tweetsQuery = query(
-			collection(db, "tweets"),
-			orderBy("createdAt", "desc")
-		);
-		const snapshot = await getDocs(tweetsQuery);
-		const tweets = snapshot.docs.map((doc) => {
-			const { photo, tweet, userId, username, createdAt } = doc.data();
-			return {
-				photo,
-				tweet,
-				userId,
-				username,
-				createdAt,
-				id: doc.id,
-			};
-		});
-		setTweet(tweets);
-	};
+
 	useEffect(() => {
+		let unsubscribe = null;
+		const fetchTweets = async () => {
+			// 쿼리 생성
+			const tweetsQuery = query(
+				collection(db, "tweets"),
+				orderBy("createdAt", "desc"),
+				limit(25)
+			);
+			// 실시간 타임라인
+			unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
+				const tweets = snapshot.docs.map((doc) => {
+					const { photo, tweet, userId, username, createdAt } = doc.data();
+					return {
+						photo,
+						tweet,
+						userId,
+						username,
+						createdAt,
+						id: doc.id,
+					};
+				});
+				setTweet(tweets);
+			});
+		};
 		fetchTweets();
+		return () => {
+			unsubscribe && unsubscribe();
+		};
 	}, []);
 	return (
 		<Wrapper>
